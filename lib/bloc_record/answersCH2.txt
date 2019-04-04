@@ -1,0 +1,51 @@
+1. Ruby gems are part of what has made programing much faster for devs.
+They are libraries that help Ruby applications run. They are standerdized
+and help with distributing these libraries. Basically its a fast way to mannage stuff.
+
+2. The lazy one will only load data when its called. THe other will pre load everything.
+which to use is purely based on how the user will interact with the data.
+
+3. Create table makes a new table while insert will just insert it into an existing table.
+
+4. The difference has to do with classes. Include will only let us use instance methods with our class,
+while the other will let us use class methods. I don't fully understand the difference, but it seems like it has
+to do with what the methods in the functions are doing.
+
+5. Its because they are called on very specific instances.
+
+6.   UPDATE character
+  SET character_name = "Jar-Jar Binks", star_rating = 1
+  WHERE id = 1
+
+7. we just need to point them in the direction of our database. 
+
+
+
+
+
+
+
+
+
+
+
+
+1. Camel Case method
+
+def toCamel(snake_word)
+  snake_word.gsub!(/_[a-z]/, &:upcase)
+  snake_word.gsub(/(_)([A-Z])/, '\2')
+end
+
+
+2.
+
+def find_by("name", "My Address Book")
+    row = connection.execute(<<-SQL)
+      SELECT * FROM #{table}
+      WHERE #{name} = #{BlocRecord::Utility.sql_strings(my address book)};
+    SQL
+
+    data = Hash[columns.zip(row)]
+    new(data)
+  end

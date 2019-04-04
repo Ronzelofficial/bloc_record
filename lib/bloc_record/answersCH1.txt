@@ -1,0 +1,39 @@
+1.
+  SELECT DISTINCT something FROM something
+  Post.all.uniq!
+  (selects what we want then makes it uniq)
+
+2. SELECT something
+   FROM something
+   WHERE (here would be any boolean or inequality)
+
+   SELECT * FROM posts WHERE (boolean, inequality,.....)
+   (select all posts based on the inequality for example,
+   then push them to a new array or data structure based on the inequality)
+
+3. SELECT * FROM post ORDER BY whatever
+  (this would sort selected values)
+  Post.order("whatever")
+
+4. SELECT * FROM posts LIMIT (some value)
+  (this one is great for me with working with lots of data, query a limited amount of data)
+  Post.limit(googleplex)
+
+5. SELECT * FROM something GROUP BY something
+Post.all.group_by(something)
+
+
+6. SELECT MAX(post) FROM post
+  this will return the maximum one. we also can use AVG, COUNT, MIn and SUM
+
+  post.max(id)
+
+7.
+
+SELECT * FROM table0 CROSS JOIN table1
+
+Im confused with Inner and Outer Join.
+maybe like this?
+
+INNER JOIN table1 ON column1
+OUTER JOIN table2 ON column2
