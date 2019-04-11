@@ -37,6 +37,42 @@ module Selection
     rows_to_array(rows)
   end
 
+
+  def find_each(start=0,batch=start)
+
+    size = start
+
+    while size > 0
+      rows = connection.execute <<-SQL
+        SELECT #{columns.join ","} FROM #{table}
+        ORDER BY #{id}
+        LIMIT #{start.abs} OFFSET #{(start-size).abs};
+      SQL
+
+      rows_to_array(rows)
+
+      rows.each do |row|
+        yield(row)
+      end
+
+      size -= batch
+    end
+  end
+
+  def find_in_batches(start=0, batch=start)
+    size = start
+    while size > 0
+      rows = connection.execute <<-SQL
+        SELECT #{columns.join ","} FROM #{table}
+        ORDER BY #{id}
+        LIMIT #{start.abs} OFFSET #{(start-size).abs};
+      SQL
+      rows_to_array(rows)
+      yield(row)
+      size -= batch
+    end
+  end
+
   def take(num=1)
     raise ArgumentError, 'Has to be an Integer.' unless num.is_a?(Integer)
     if num > 1
@@ -58,7 +94,7 @@ module Selection
       ORDER BY random()
       LIMIT 1;
     SQL
-
+    
     init_object_from_row(row)
   end
 
@@ -107,5 +143,4 @@ end
   def rows_to_array(rows)
     rows.map { |row| new(Hash[columns.zip(row)]) }
   end
-
 end
