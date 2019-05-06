@@ -36,16 +36,64 @@ module Persistence
       self.class.update(self.id, updates)
     end
 
+    def destroy
+      self.class.destroy(self.id)
+    end
+
     def method_missing(m, *args)
       attribute = m.to_s
       attribute.slice!("update_")
       update_attribute(attribute, args[0])
     end
-    
+
   module ClassMethods
     def update_all(updates)
       update(nil, updates)
     end
+
+
+    def destroy_all(conditions_hash=nil)
+      if conditions_hash && !conditions_hash.empty?
+        if conditions_hash.class == Hash
+          conditions_hash = BlocRecord::Utility.convert_keys(conditions_hash)
+          conditions = conditions_hash.map {|key, value| "#{key}=#{BlocRecord::Utility.sql_strings(value)}"}.join(" and ")
+        elsif conditions_hash.class == String
+          conditions = conditions_hash
+        elsif conditions_hash.class == Array
+          conditions = conditions_hash.join(",")
+        end
+        
+        connection.execute <<-SQL
+          DELETE FROM #{table}
+          WHERE #{conditions};
+        SQL
+      else
+        connection.execute <<-SQL
+          DELETE FROM #{table}
+        SQL
+      end
+
+      true
+    end
+
+
+
+
+
+    def destroy(*id)
+      if id.length > 1
+        where_clause = "WHERE id IN (#{id.join(",")});"
+      else
+        where_clause = "WHERE id = #{id.first};"
+      end
+
+      connection.execute <<-SQL
+        DELETE FROM #{table} #{where_clause}
+      SQL
+
+      true
+    end
+
     def create(attrs)
       attrs = BlocRecord::Utility.convert_keys(attrs)
       attrs.delete "id"
