@@ -94,7 +94,7 @@ module Selection
       ORDER BY random()
       LIMIT 1;
     SQL
-    
+
     init_object_from_row(row)
   end
 
@@ -141,6 +141,8 @@ end
     end
 
   def rows_to_array(rows)
-    rows.map { |row| new(Hash[columns.zip(row)]) }
+    collection = BlocRecord::Collection.new
+    rows.each { |row| collection << new(Hash[columns.zip(row)]) }
+    collection
   end
 end

@@ -1,0 +1,23 @@
+module BlocRecord
+   class Collection < Array
+     # #5
+     def update_all(updates)
+       ids = self.map(&:id)
+       # #6
+       self.any? ? self.first.class.update(ids, updates) : false
+     end
+
+     def take(num=1)
+       self[0..num-1] if self.any?
+     end
+
+     def where(*args)
+       ids = self.map(&:id)
+       self.any? ? self.first.class.where(args.first, {ids: ids}) : false
+     end
+
+     def not(*args)
+       ids = self.map(&:id)
+       self.any? ? self.first.class.not(args.first, {ids: ids}) : false
+     end
+ end
