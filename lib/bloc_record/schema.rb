@@ -19,9 +19,6 @@ module Schema
       def columns
         schema.keys
       end
-
-
-
    def attributes
      columns - ["id"]
    end
